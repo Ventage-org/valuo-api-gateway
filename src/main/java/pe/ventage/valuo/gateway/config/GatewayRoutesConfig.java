@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
-import static org.springframework.cloud.gateway.server.mvc.filter.AfterFilterFunctions.DedupeStrategy.RETAIN_UNIQUE;
-import static org.springframework.cloud.gateway.server.mvc.filter.AfterFilterFunctions.dedupeResponseHeader;
+import static org.springframework.cloud.gateway.server.mvc.filter.AfterFilterFunctions.removeResponseHeader;
+import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions.removeRequestHeader;
 import static org.springframework.cloud.gateway.server.mvc.filter.BeforeFilterFunctions.uri;
 import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions.route;
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
@@ -32,22 +32,25 @@ public class GatewayRoutesConfig {
                         .or(path("/api/v1/usuarios/**"))
                         .or(path("/api/v1/distritos/**")), http())
                 .before(uri(usuariosUrl))
-                .after(dedupeResponseHeader("Access-Control-Allow-Origin", RETAIN_UNIQUE))
-                .after(dedupeResponseHeader("Access-Control-Allow-Credentials", RETAIN_UNIQUE))
+                .before(removeRequestHeader("Origin"))
+                .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                .after(removeResponseHeader("Access-Control-Allow-Credentials"))
                 .build()
                 .and(route("msinmuebles")
                         .route(path("/api/v1/inmuebles/**")
                                 .or(path("/uploads/**")), http())
                         .before(uri(inmueblesUrl))
-                        .after(dedupeResponseHeader("Access-Control-Allow-Origin", RETAIN_UNIQUE))
-                        .after(dedupeResponseHeader("Access-Control-Allow-Credentials", RETAIN_UNIQUE))
+                        .before(removeRequestHeader("Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Credentials"))
                         .build())
                 .and(route("msprediccion")
                         .route(path("/api/v1/estimaciones/**")
                                 .or(path("/api/v1/modelos/**")), http())
                         .before(uri(prediccionUrl))
-                        .after(dedupeResponseHeader("Access-Control-Allow-Origin", RETAIN_UNIQUE))
-                        .after(dedupeResponseHeader("Access-Control-Allow-Credentials", RETAIN_UNIQUE))
+                        .before(removeRequestHeader("Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Credentials"))
                         .build());
     }
 }

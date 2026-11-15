@@ -25,6 +25,15 @@ public class GatewayRoutesConfig {
     @Value("${valuo.services.prediccion.url:http://localhost:8083}")
     private String prediccionUrl;
 
+    @Value("${valuo.services.rentabilidad.url:http://localhost:8084}")
+    private String rentabilidadUrl;
+
+    @Value("${valuo.services.reportes.url:http://localhost:8085}")
+    private String reportesUrl;
+
+    @Value("${valuo.services.monitoring.url:http://localhost:8086}")
+    private String monitoringUrl;
+
     @Bean
     public RouterFunction<ServerResponse> customGatewayRoutes() {
         return route("msusuarios")
@@ -48,6 +57,29 @@ public class GatewayRoutesConfig {
                         .route(path("/api/v1/estimaciones/**")
                                 .or(path("/api/v1/modelos/**")), http())
                         .before(uri(prediccionUrl))
+                        .before(removeRequestHeader("Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Credentials"))
+                        .build())
+                .and(route("msrentabilidad")
+                        .route(path("/api/v1/rentabilidad/**"), http())
+                        .before(uri(rentabilidadUrl))
+                        .before(removeRequestHeader("Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Credentials"))
+                        .build())
+                .and(route("msreportes")
+                        .route(path("/api/v1/reportes/**"), http())
+                        .before(uri(reportesUrl))
+                        .before(removeRequestHeader("Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Origin"))
+                        .after(removeResponseHeader("Access-Control-Allow-Credentials"))
+                        .build())
+                .and(route("valuo-monitoring-service")
+                        .route(path("/api/v1/dashboard/**")
+                                .or(path("/api/v1/governance/**"))
+                                .or(path("/api/v1/audit/**")), http())
+                        .before(uri(monitoringUrl))
                         .before(removeRequestHeader("Origin"))
                         .after(removeResponseHeader("Access-Control-Allow-Origin"))
                         .after(removeResponseHeader("Access-Control-Allow-Credentials"))

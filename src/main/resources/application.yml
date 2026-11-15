@@ -15,6 +15,12 @@ valuo:
       url: ${MS_INMUEBLES_URL:http://localhost:8082}
     prediccion:
       url: ${MS_PREDICCION_URL:http://localhost:8083}
+    rentabilidad:
+      url: ${MS_RENTABILIDAD_URL:http://localhost:8084}
+    reportes:
+      url: ${MS_REPORTES_URL:http://localhost:8085}
+    monitoring:
+      url: ${MS_MONITORING_URL:http://localhost:8086}
 
 management:
   endpoints:

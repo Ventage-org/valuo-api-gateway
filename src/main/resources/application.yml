@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: valuo-api-gateway
+
+valuo:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:4200,http://127.0.0.1:4200,http://localhost:3000,http://127.0.0.1:3000}
+  services:
+    usuarios:
+      url: ${MS_USUARIOS_URL:http://localhost:8081}
+    inmuebles:
+      url: ${MS_INMUEBLES_URL:http://localhost:8082}
+    prediccion:
+      url: ${MS_PREDICCION_URL:http://localhost:8083}
+    rentabilidad:
+      url: ${MS_RENTABILIDAD_URL:http://localhost:8084}
+    reportes:
+      url: ${MS_REPORTES_URL:http://localhost:8085}
+    monitoring:
+      url: ${MS_MONITORING_URL:http://localhost:8086}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
